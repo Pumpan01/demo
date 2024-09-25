@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'profile.dart'; // นำเข้าไฟล์ profile.dart ที่อยู่ใน lib/
+import 'notice_page.dart'; // นำเข้า notice_page.dart
 
 void main() {
   runApp(const MyApp());
@@ -45,14 +46,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _currentIndex = 1;
+  int _currentIndex = 1; // เปลี่ยนเป็น 1 เพื่อให้หน้าแรกเป็น HomeContent
 
+  // รายการหน้าที่จะนำมาใช้ในแต่ละปุ่มของ BottomNavigationBar
   final List<Widget> _pages = [
-    const BackPage(),   // หน้า Back
+    const NoticePage(), // หน้า Notice
     const HomeContent(),  // หน้า HomeContent
     const ProfilePage(),  // หน้า Profile
   ];
 
+  // ฟังก์ชันจัดการการเปลี่ยนหน้าตามการกด BottomNavigationBar
   void _onTabTapped(int index) {
     setState(() {
       _currentIndex = index;
@@ -97,16 +100,16 @@ class _HomePageState extends State<HomePage> {
             type: BottomNavigationBarType.fixed,
             items: const [
               BottomNavigationBarItem(
-                icon: Icon(Icons.arrow_back),
-                label: 'Back',
+                icon: Icon(Icons.notifications),
+                label: 'แจ้งเตือน', // เปลี่ยนเป็นภาษาไทย
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.home),
-                label: 'Home',
+                label: 'หน้าแรก',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.person),
-                label: 'Profile',
+                label: 'โปรไฟล์',
               ),
             ],
           ),
@@ -136,73 +139,53 @@ class HomeContent extends StatelessWidget {
           children: [
             MenuButton(
               icon: Icons.receipt_long,
-              title: 'บิลค่าน้ำค่าไฟ',
-              subtitle: 'Bill',
+              title: 'บิลค่าน้ำค่าไฟ',  // เปลี่ยนเป็นภาษาไทย
+              subtitle: 'บิล',
               color: Colors.white,
               iconColor: Colors.orange,
               onTap: () {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Bill selected')),
+                  const SnackBar(content: Text('เลือกบิลค่าน้ำค่าไฟ')),
                 );
               },
             ),
             MenuButton(
               icon: Icons.payments,
-              title: 'ชำระค่าน้ำค่าไฟ',
-              subtitle: 'Pay bills',
+              title: 'ชำระค่าน้ำค่าไฟ',  // เปลี่ยนเป็นภาษาไทย
+              subtitle: 'ชำระ',
               color: Colors.white,
               iconColor: Colors.orange,
               onTap: () {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Pay bills selected')),
+                  const SnackBar(content: Text('เลือกชำระค่าน้ำค่าไฟ')),
                 );
               },
             ),
             MenuButton(
               icon: Icons.build,
-              title: 'แจ้งซ่อม',
-              subtitle: 'Report a repair',
+              title: 'แจ้งซ่อม',  // เปลี่ยนเป็นภาษาไทย
+              subtitle: 'ซ่อม',
               color: Colors.white,
               iconColor: Colors.orange,
               onTap: () {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Repair reported')),
+                  const SnackBar(content: Text('แจ้งซ่อม')),
                 );
               },
             ),
             MenuButton(
               icon: Icons.phone_in_talk,
-              title: 'เบอร์ติดต่อฉุกเฉิน',
-              subtitle: 'Sos call',
+              title: 'เบอร์ติดต่อฉุกเฉิน',  // เปลี่ยนเป็นภาษาไทย
+              subtitle: 'ฉุกเฉิน',
               color: Colors.white,
               iconColor: Colors.orange,
               onTap: () {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Sos call selected')),
+                  const SnackBar(content: Text('เลือกเบอร์ติดต่อฉุกเฉิน')),
                 );
               },
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-// หน้า Back
-class BackPage extends StatelessWidget {
-  const BackPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Back Page'),
-      ),
-      body: const Center(
-        child: Text(
-          'This is the back page',
-          style: TextStyle(fontSize: 24),
         ),
       ),
     );

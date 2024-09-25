@@ -22,7 +22,7 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
-    // ฟังก์ชันตรวจสอบการล็อกอิน
+    // ฟังก์ชันตรวจสอบการล็อกอิน (ใช้ข้อมูลสมมุติ)
     if (_emailController.text == "a" && _passwordController.text == "a") {
       // ถ้าล็อกอินสำเร็จ ให้ไปหน้า HomePage
       Navigator.pushReplacement(
@@ -52,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
 
               // โลโก้ หรือ ไอคอน
               Image.asset(
-                'images/logohorplus.png',
+                'images/logohorplus.png', // ใส่รูปโลโก้จาก assets
                 width: 150, // ขนาดที่ใหญ่ขึ้น
                 height: 150,
               ),
