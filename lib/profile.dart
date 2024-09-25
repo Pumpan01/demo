@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:myproject/Payment.dart';
+import 'login.dart'; // นำเข้าไฟล์ login.dart
 import 'Payment.dart'; // นำเข้าไฟล์ payment.dart
 import 'history.dart'; // นำเข้าไฟล์ history.dart
-import 'main.dart'; // นำเข้า main.dart เพื่อใช้ Navigator ไปหน้า Main
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -18,12 +17,7 @@ class ProfilePage extends StatelessWidget {
           'ข้อมูลห้องพัก',
           style: TextStyle(color: Colors.white, fontSize: 24),
         ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context); // กลับไปยังหน้าเดิมเมื่อกดปุ่ม "Back"
-          },
-        ),
+        // ไม่ใส่ leading เพื่อเอาปุ่มย้อนกลับออก
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -134,6 +128,33 @@ class ProfilePage extends StatelessWidget {
                 ],
               ),
             ),
+
+            // ปุ่ม Logout สีแดง อยู่ด้านล่างตรงกลาง
+            const Spacer(), // ใช้ Spacer เพื่อดันปุ่ม Logout ลงไปด้านล่าง
+            Center(
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  // เมื่อกดออกจากระบบ กลับไปที่หน้า Login
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LoginPage()), // ไปหน้า LoginPage
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red, // ปุ่มสีแดง
+                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 40),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                ),
+                icon: const Icon(Icons.logout, color: Colors.white),
+                label: const Text(
+                  'ออกจากระบบ',
+                  style: TextStyle(fontSize: 18, color: Colors.white),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20), // เพิ่มช่องว่างด้านล่างปุ่ม Logout
           ],
         ),
       ),

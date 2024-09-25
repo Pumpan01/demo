@@ -14,6 +14,14 @@ class _LoginPageState extends State<LoginPage> {
   bool _isPasswordVisible = false;
 
   void _login() {
+    // ตรวจสอบว่าผู้ใช้กรอกอีเมลและรหัสผ่านหรือไม่
+    if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('กรุณากรอกอีเมลและรหัสผ่าน')),
+      );
+      return;
+    }
+
     // ฟังก์ชันตรวจสอบการล็อกอิน
     if (_emailController.text == "a" && _passwordController.text == "a") {
       // ถ้าล็อกอินสำเร็จ ให้ไปหน้า HomePage
@@ -40,15 +48,15 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 80),
+              const SizedBox(height: 60), // ปรับขนาดให้รูปอยู่ห่างจากด้านบน
 
               // โลโก้ หรือ ไอคอน
-              const CircleAvatar(
-                radius: 50,
-                backgroundColor: Colors.orange,
-                child: Icon(Icons.lock_outline, size: 50, color: Colors.white),
+              Image.asset(
+                'images/logohorplus.png',
+                width: 150, // ขนาดที่ใหญ่ขึ้น
+                height: 150,
               ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 20), // ลดระยะห่างระหว่างโลโก้กับข้อความเข้าสู่ระบบ
 
               // ข้อความต้อนรับ
               const Text(
@@ -118,7 +126,9 @@ class _LoginPageState extends State<LoginPage> {
 
               // ลืมรหัสผ่าน
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  // ฟังก์ชันลืมรหัสผ่าน
+                },
                 child: const Text(
                   'ลืมรหัสผ่าน?',
                   style: TextStyle(

@@ -13,6 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Dorm Management App',
       theme: ThemeData(
+        fontFamily: 'Poppins',  // ใช้ฟอนต์ Poppins เพื่อความทันสมัย
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.orange,
           primary: Colors.orange,
@@ -62,31 +63,54 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _pages[_currentIndex], // แสดงหน้าที่ตรงกับปุ่มที่เลือกใน BottomNavigationBar
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: _onTabTapped,
-        backgroundColor: Colors.grey[850], // สีเทาเข้มสำหรับ BottomNavigationBar
-        selectedItemColor: Colors.orange,
-        unselectedItemColor: Colors.white,
-        showSelectedLabels: true,
-        showUnselectedLabels: true,
-        selectedFontSize: 14,
-        unselectedFontSize: 14,
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.arrow_back),
-            label: 'Back',
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.white, // เปลี่ยนสีพื้นหลังของ BottomNavigationBar เป็นสีขาว
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(25.0), 
+            topRight: Radius.circular(25.0),
+          ), // ปรับมุมให้โค้งมน
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 15,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(25.0),
+            topRight: Radius.circular(25.0),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
+          child: BottomNavigationBar(
+            currentIndex: _currentIndex,
+            onTap: _onTabTapped,
+            backgroundColor: Colors.white, // พื้นหลังของ BottomNavigationBar
+            selectedItemColor: Colors.orange, // สีเมื่อถูกเลือก
+            unselectedItemColor: Colors.grey, // สีเมื่อยังไม่ถูกเลือก
+            showSelectedLabels: true,
+            showUnselectedLabels: true,
+            selectedFontSize: 14,
+            unselectedFontSize: 14,
+            type: BottomNavigationBarType.fixed,
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.arrow_back),
+                label: 'Back',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person),
+                label: 'Profile',
+              ),
+            ],
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
+        ),
       ),
     );
   }
