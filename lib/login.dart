@@ -130,7 +130,7 @@ class _LoginPageState extends State<LoginPage> {
                   // ฟังก์ชันลืมรหัสผ่าน
                 },
                 child: const Text(
-                  'ลืมรหัสผ่าน?',
+                  'ไม่จำรหัสผ่านวะ?',
                   style: TextStyle(
                     color: Colors.orange,
                     fontSize: 16,
