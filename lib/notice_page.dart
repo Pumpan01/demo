@@ -15,7 +15,7 @@ class NoticePage extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.warning, color: Colors.orange),
             title: Text('ประกาศน้ำไม่ไหล'),
-            subtitle: Text('วันนี้น้ำจะไม่ไหลตั้งแต่ 8 โมงเช้าถึงเที่ยง'),
+            subtitle: Text('วันนี้น้ำจะไม่ไหลตั้งแต่ 9 โมงเช้าถึงเที่ยง'),
           ),
           ListTile(
             leading: Icon(Icons.warning, color: Colors.orange),
