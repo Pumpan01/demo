@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'home_page.dart'; // นำเข้า home_page.dart เพื่อไปที่หน้าหลังจากล็อกอินสำเร็จ
-
+import 'admin/main_admin.dart'; // นำเข้าไฟล์ main_admin.dart เพื่อไปที่หน้าหลังจากล็อกอินสำเร็จ
+import 'home_page.dart';
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -24,10 +24,10 @@ class _LoginPageState extends State<LoginPage> {
 
     // ฟังก์ชันตรวจสอบการล็อกอิน (ใช้ข้อมูลสมมุติ)
     if (_emailController.text == "a" && _passwordController.text == "a") {
-      // ถ้าล็อกอินสำเร็จ ให้ไปหน้า HomePage
+      // ถ้าล็อกอินสำเร็จ ให้ไปหน้า main_admin.dart
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
+        MaterialPageRoute(builder: (context) => const AdminHomePage()),
       );
     } else {
       // ถ้าล็อกอินไม่สำเร็จ แสดงข้อความเตือน
@@ -56,7 +56,8 @@ class _LoginPageState extends State<LoginPage> {
                 width: 150, // ขนาดที่ใหญ่ขึ้น
                 height: 150,
               ),
-              const SizedBox(height: 20), // ลดระยะห่างระหว่างโลโก้กับข้อความเข้าสู่ระบบ
+              const SizedBox(
+                  height: 20), // ลดระยะห่างระหว่างโลโก้กับข้อความเข้าสู่ระบบ
 
               // ข้อความต้อนรับ
               const Text(
@@ -95,7 +96,9 @@ class _LoginPageState extends State<LoginPage> {
                   prefixIcon: const Icon(Icons.lock_outline),
                   suffixIcon: IconButton(
                     icon: Icon(
-                      _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                      _isPasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
                     ),
                     onPressed: () {
                       setState(() {
@@ -109,10 +112,11 @@ class _LoginPageState extends State<LoginPage> {
 
               // ปุ่มเข้าสู่ระบบ
               ElevatedButton(
-                onPressed: _login,  // ฟังก์ชันล็อกอิน
+                onPressed: _login, // ฟังก์ชันล็อกอิน
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.orange,
-                  padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 80),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 15, horizontal: 80),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
@@ -122,21 +126,7 @@ class _LoginPageState extends State<LoginPage> {
                   style: TextStyle(fontSize: 18, color: Colors.white),
                 ),
               ),
-              const SizedBox(height: 20),
-
-              // ลืมรหัสผ่าน
-              TextButton(
-                onPressed: () {
-                  // ฟังก์ชันลืมรหัสผ่าน
-                },
-                child: const Text(
-                  'ไม่จำรหัสผ่านวะ?',
-                  style: TextStyle(
-                    color: Colors.orange,
-                    fontSize: 16,
-                  ),
-                ),
-              ),
+              const SizedBox(height: 20)
             ],
           ),
         ),
