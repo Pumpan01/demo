@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'admin/main_admin.dart'; // นำเข้าไฟล์ main_admin.dart เพื่อไปที่หน้าหลังจากล็อกอินสำเร็จ
-import 'home_page.dart';
+import 'UI/home_page.dart'; // นำเข้าไฟล์หน้า HomePage
+import 'admin/main_admin.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -13,27 +14,43 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   bool _isPasswordVisible = false;
 
+  // ฟังก์ชันสำหรับแสดง Popup แจ้งเตือน
+  void _showErrorPopup(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('เกิดข้อผิดพลาด'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // ปิด Popup
+              },
+              child: const Text('ตกลง'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // ฟังก์ชันตรวจสอบการล็อกอิน
   void _login() {
-    // ตรวจสอบว่าผู้ใช้กรอกอีเมลและรหัสผ่านหรือไม่
     if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('กรุณากรอกอีเมลและรหัสผ่าน')),
-      );
+      _showErrorPopup('กรุณากรอกอีเมลและรหัสผ่าน'); // แสดง Popup ถ้าไม่ได้กรอกข้อมูล
       return;
     }
 
-    // ฟังก์ชันตรวจสอบการล็อกอิน (ใช้ข้อมูลสมมุติ)
     if (_emailController.text == "a" && _passwordController.text == "a") {
-      // ถ้าล็อกอินสำเร็จ ให้ไปหน้า main_admin.dart
+      // ถ้าล็อกอินสำเร็จ ให้ไปหน้า HomePage
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const AdminHomePage()),
+        MaterialPageRoute(builder: (context) => const AdminApp()),
       );
     } else {
-      // ถ้าล็อกอินไม่สำเร็จ แสดงข้อความเตือน
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('อีเมลหรือรหัสผ่านไม่ถูกต้อง')),
-      );
+      // แสดง Popup ถ้าล็อกอินไม่สำเร็จ
+      _showErrorPopup('อีเมลหรือรหัสผ่านไม่ถูกต้อง');
     }
   }
 
@@ -41,25 +58,35 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 60), // ปรับขนาดให้รูปอยู่ห่างจากด้านบน
-
-              // โลโก้ หรือ ไอคอน
-              Image.asset(
-                'images/logohorplus.png', // ใส่รูปโลโก้จาก assets
-                width: 150, // ขนาดที่ใหญ่ขึ้น
-                height: 150,
+              const SizedBox(height: 80),
+              
+              // โลโก้
+              Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.orange.withOpacity(0.2),
+                      spreadRadius: 5,
+                      blurRadius: 10,
+                    ),
+                  ],
+                ),
+                child: Image.asset(
+                  'images/logohorplus.png',
+                  width: 150,
+                  height: 150,
+                ),
               ),
-              const SizedBox(
-                  height: 20), // ลดระยะห่างระหว่างโลโก้กับข้อความเข้าสู่ระบบ
+              
+              const SizedBox(height: 30),
 
-              // ข้อความต้อนรับ
               const Text(
                 'เข้าสู่ระบบ',
                 style: TextStyle(
@@ -68,18 +95,21 @@ class _LoginPageState extends State<LoginPage> {
                   color: Colors.orange,
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 30),
 
               // ช่องกรอกอีเมล
               TextField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
-                  labelText: 'Username',
+                  labelText: 'อีเมล',
+                  filled: true,
+                  fillColor: Colors.grey[200],
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(30),
+                    borderSide: BorderSide.none,
                   ),
-                  prefixIcon: const Icon(Icons.email_outlined),
+                  prefixIcon: const Icon(Icons.email_outlined, color: Colors.orange),
                 ),
               ),
               const SizedBox(height: 20),
@@ -89,16 +119,18 @@ class _LoginPageState extends State<LoginPage> {
                 controller: _passwordController,
                 obscureText: !_isPasswordVisible,
                 decoration: InputDecoration(
-                  labelText: 'Password',
+                  labelText: 'รหัสผ่าน',
+                  filled: true,
+                  fillColor: Colors.grey[200],
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(30),
+                    borderSide: BorderSide.none,
                   ),
-                  prefixIcon: const Icon(Icons.lock_outline),
+                  prefixIcon: const Icon(Icons.lock_outline, color: Colors.orange),
                   suffixIcon: IconButton(
                     icon: Icon(
-                      _isPasswordVisible
-                          ? Icons.visibility
-                          : Icons.visibility_off,
+                      _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                      color: Colors.orange,
                     ),
                     onPressed: () {
                       setState(() {
@@ -108,25 +140,26 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 30),
 
               // ปุ่มเข้าสู่ระบบ
               ElevatedButton(
-                onPressed: _login, // ฟังก์ชันล็อกอิน
+                onPressed: _login,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.orange,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 15, horizontal: 80),
+                  padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 80),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
+                  shadowColor: Colors.orangeAccent,
+                  elevation: 10,
                 ),
                 child: const Text(
                   'เข้าสู่ระบบ',
                   style: TextStyle(fontSize: 18, color: Colors.white),
                 ),
               ),
-              const SizedBox(height: 20)
+              const SizedBox(height: 30),
             ],
           ),
         ),

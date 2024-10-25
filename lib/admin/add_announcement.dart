@@ -15,7 +15,7 @@ class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
   // ฟังก์ชันสำหรับบันทึกประกาศใหม่
   void _saveAnnouncement() {
     if (_formKey.currentState!.validate()) {
-      // คุณสามารถเชื่อมต่อกับ API เพื่อบันทึกประกาศได้ที่นี่
+      // สมมุติว่าประกาศถูกบันทึกแล้ว (ในอนาคตสามารถเชื่อมต่อกับ API ได้)
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('บันทึกประกาศเรียบร้อย')),
       );
@@ -35,6 +35,7 @@ class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('เพิ่มประกาศใหม่'),
+        backgroundColor: Colors.orange,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -46,16 +47,24 @@ class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
               children: [
                 const Text(
                   'สร้างประกาศใหม่',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 24, 
+                    fontWeight: FontWeight.bold, 
+                    color: Colors.orange,
+                  ),
                 ),
                 const SizedBox(height: 20),
                 
                 // ช่องกรอกชื่อประกาศ
                 TextFormField(
                   controller: _titleController,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     labelText: 'ชื่อประกาศ',
-                    border: OutlineInputBorder(),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12), // โค้งมน
+                    ),
+                    filled: true,
+                    fillColor: Colors.grey[200], // พื้นหลังสีเทาอ่อน
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -70,9 +79,13 @@ class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
                 TextFormField(
                   controller: _detailController,
                   maxLines: 5,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     labelText: 'รายละเอียดประกาศ',
-                    border: OutlineInputBorder(),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12), // โค้งมน
+                    ),
+                    filled: true,
+                    fillColor: Colors.grey[200], // พื้นหลังสีเทาอ่อน
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -83,22 +96,25 @@ class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
                 ),
                 const SizedBox(height: 30),
 
-                // ปุ่มบันทึก
+                // ปุ่มบันทึกประกาศ
                 Center(
-                  child: ElevatedButton(
+                  child: ElevatedButton.icon(
                     onPressed: _saveAnnouncement,
+                    icon: const Icon(Icons.save, color: Colors.white),
                     style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.orange, // สีส้มสำหรับปุ่ม
                       padding: const EdgeInsets.symmetric(
                         vertical: 15,
                         horizontal: 40,
                       ),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
+                        borderRadius: BorderRadius.circular(30), // โค้งมน
                       ),
+                      elevation: 5, // เพิ่มเงาให้ปุ่มดูเด่นขึ้น
                     ),
-                    child: const Text(
+                    label: const Text(
                       'บันทึกประกาศ',
-                      style: TextStyle(fontSize: 18),
+                      style: TextStyle(fontSize: 18, color: Colors.white),
                     ),
                   ),
                 ),

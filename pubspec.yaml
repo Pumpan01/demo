@@ -14,6 +14,8 @@ dependencies:
   curved_navigation_bar: ^1.0.3
   image_picker: ^0.8.7+3 # สำหรับการเลือกและถ่ายภาพ
   cupertino_icons: ^1.0.8
+  url_launcher: ^6.0.20
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:
