@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // นำเข้า intl สำหรับจัดการวันที่
+import 'package:intl/intl.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ManageRepairsPage extends StatelessWidget {
   const ManageRepairsPage({super.key});
@@ -21,7 +22,10 @@ class ManageRepairsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('จัดการการแจ้งซ่อม'),
+        title: Text(
+          'จัดการการแจ้งซ่อม',
+          style: GoogleFonts.poppins(),
+        ),
         backgroundColor: Colors.orange,
       ),
       body: Padding(
@@ -29,14 +33,20 @@ class ManageRepairsPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'รายการแจ้งซ่อม',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              style: GoogleFonts.poppins(
+                textStyle: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.orange,
+                ),
+              ),
             ),
             const SizedBox(height: 20),
             Expanded(
               child: ListView.builder(
-                itemCount: mockRepairs.length, // จำนวนรายการซ่อม
+                itemCount: mockRepairs.length,
                 itemBuilder: (context, index) {
                   return RepairCard(
                     roomNumber: mockRepairs[index]['roomNumber'],
@@ -57,7 +67,7 @@ class RepairCard extends StatefulWidget {
   final String details;
 
   const RepairCard({
-    super.key, // ใช้ super.key แทน
+    super.key,
     required this.roomNumber,
     required this.details,
   });
@@ -67,10 +77,9 @@ class RepairCard extends StatefulWidget {
 }
 
 class _RepairCardState extends State<RepairCard> {
-  bool _isReceived = false; // สถานะการรับเรื่องซ่อม
-  String? _selectedDate; // วันที่ตอบกลับว่าจะไปซ่อม
+  bool _isReceived = false;
+  String? _selectedDate;
 
-  // ฟังก์ชันรับเรื่องซ่อม
   void _receiveRepair() {
     setState(() {
       _isReceived = true;
@@ -80,7 +89,6 @@ class _RepairCardState extends State<RepairCard> {
     );
   }
 
-  // ฟังก์ชันสำหรับเลือกวันที่
   Future<void> _selectDate(BuildContext context) async {
     DateTime? pickedDate = await showDatePicker(
       context: context,
@@ -106,6 +114,7 @@ class _RepairCardState extends State<RepairCard> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
       ),
+      color: Colors.white,
       elevation: 3,
       margin: const EdgeInsets.symmetric(vertical: 10),
       child: Padding(
@@ -119,20 +128,32 @@ class _RepairCardState extends State<RepairCard> {
                 backgroundColor: Colors.orange.shade100,
                 child: Text(
                   widget.roomNumber.toString(),
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.orange,
-                    fontSize: 18,
+                  style: GoogleFonts.poppins(
+                    textStyle: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.orange,
+                      fontSize: 18,
+                    ),
                   ),
                 ),
               ),
               title: Text(
                 'ห้อง ${widget.roomNumber}',
-                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: GoogleFonts.poppins(
+                  textStyle: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
               subtitle: Text(
                 widget.details,
-                style: const TextStyle(fontSize: 16, color: Colors.black54),
+                style: GoogleFonts.poppins(
+                  textStyle: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.black54,
+                  ),
+                ),
               ),
               trailing: ElevatedButton(
                 onPressed: _isReceived ? null : _receiveRepair,
@@ -144,7 +165,12 @@ class _RepairCardState extends State<RepairCard> {
                 ),
                 child: Text(
                   _isReceived ? 'รับเรื่องแล้ว' : 'รับเรื่อง',
-                  style: const TextStyle(fontSize: 16, color: Colors.white),
+                  style: GoogleFonts.poppins(
+                    textStyle: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -154,7 +180,12 @@ class _RepairCardState extends State<RepairCard> {
                 _selectedDate != null
                     ? 'วันที่จะไปซ่อม: $_selectedDate'
                     : 'ยังไม่ได้ระบุวันที่จะไปซ่อม',
-                style: const TextStyle(fontSize: 16, color: Colors.blueGrey),
+                style: GoogleFonts.poppins(
+                  textStyle: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.blueGrey,
+                  ),
+                ),
               ),
               const SizedBox(height: 10),
               ElevatedButton(
@@ -165,9 +196,13 @@ class _RepairCardState extends State<RepairCard> {
                     borderRadius: BorderRadius.circular(30),
                   ),
                 ),
-                child: const Text(
+                child: Text(
                   'เลือกวันที่จะไปซ่อม',
-                  style: TextStyle(color: Colors.white),
+                  style: GoogleFonts.poppins(
+                    textStyle: const TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
               ),
             ],

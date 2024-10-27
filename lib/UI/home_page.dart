@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:myproject/UI/notice_page.dart';
 import 'package:myproject/UI/profile.dart';
 import 'package:myproject/UI/report_repairs_page.dart';
@@ -50,12 +52,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _currentIndex = 1; // ค่าเริ่มต้นที่หน้าแรก (HomeContent)
+  int _currentIndex = 1;
 
   final List<Widget> _pages = [
-    const NoticePage(), // หน้าประกาศ
-    const HomeContent(), // หน้าเนื้อหาหลัก
-    const ProfilePage(), // หน้าข้อมูลผู้ใช้
+    const NoticePage(),
+    const HomeContent(),
+    const ProfilePage(),
   ];
 
   void _onTabTapped(int index) {
@@ -67,7 +69,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_currentIndex], // แสดงเนื้อหาของแต่ละหน้า
+      body: _pages[_currentIndex],
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -102,15 +104,15 @@ class _HomePageState extends State<HomePage> {
             type: BottomNavigationBarType.fixed,
             items: const [
               BottomNavigationBarItem(
-                icon: Icon(Icons.notifications),
+                icon: Icon(FontAwesomeIcons.bell),
                 label: 'แจ้งเตือน',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.home),
+                icon: Icon(FontAwesomeIcons.home),
                 label: 'หน้าแรก',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.person),
+                icon: Icon(FontAwesomeIcons.user),
                 label: 'โปรไฟล์',
               ),
             ],
@@ -121,7 +123,6 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-// หน้าหลัก (HomeContent) ที่มีปุ่มต่างๆ
 class HomeContent extends StatelessWidget {
   const HomeContent({super.key});
 
@@ -130,9 +131,11 @@ class HomeContent extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text(
+        title: Text(
           'HorPlus',
-          style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+          style: GoogleFonts.poppins(
+            textStyle: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+          ),
         ),
       ),
       body: Padding(
@@ -144,57 +147,49 @@ class HomeContent extends StatelessWidget {
           children: [
             _buildMenuButton(
               context,
-              icon: Icons.receipt_long,
+              icon: FontAwesomeIcons.fileInvoiceDollar,
               title: 'บิลค่าน้ำค่าไฟ',
               subtitle: 'บิล',
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          const WaterBillPage()), // ไปหน้าบิลค่าน้ำค่าไฟ
+                  MaterialPageRoute(builder: (context) => const WaterBillPage()),
                 );
               },
             ),
             _buildMenuButton(
               context,
-              icon: Icons.payments,
-              title: 'ประวัติการชำระ', // เพิ่มเครื่องหมาย ' ที่หายไป
+              icon: FontAwesomeIcons.history,
+              title: 'ประวัติการชำระ',
               subtitle: 'ประวัติ',
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          PaymentHistoryPage()), // ลบ const ถ้าไม่จำเป็น
+                  MaterialPageRoute(builder: (context) => PaymentHistoryPage()),
                 );
               },
             ),
             _buildMenuButton(
               context,
-              icon: Icons.build,
+              icon: FontAwesomeIcons.screwdriverWrench,
               title: 'แจ้งซ่อม/ร้องเรียน',
               subtitle: 'ซ่อม/ร้องเรียน',
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          const ReportRepairsPage()), // ไปหน้าแจ้งซ่อม
+                  MaterialPageRoute(builder: (context) => const ReportRepairsPage()),
                 );
               },
             ),
             _buildMenuButton(
               context,
-              icon: Icons.phone_in_talk,
+              icon: FontAwesomeIcons.phone,
               title: 'เบอร์ติดต่อฉุกเฉิน',
               subtitle: 'ฉุกเฉิน',
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          const EmergencyContactPage()), // ไปหน้าเบอร์ติดต่อฉุกเฉิน
+                  MaterialPageRoute(builder: (context) => const EmergencyContactPage()),
                 );
               },
             ),
@@ -204,7 +199,6 @@ class HomeContent extends StatelessWidget {
     );
   }
 
-  // ฟังก์ชันสร้างปุ่มเมนู
   Widget _buildMenuButton(
     BuildContext context, {
     required IconData icon,
@@ -221,9 +215,9 @@ class HomeContent extends StatelessWidget {
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.3),
-              spreadRadius: 2,
-              blurRadius: 5,
-              offset: const Offset(0, 3),
+              spreadRadius: 3,
+              blurRadius: 7,
+              offset: const Offset(0, 5),
             ),
           ],
         ),
@@ -241,18 +235,22 @@ class HomeContent extends StatelessWidget {
               Text(
                 title,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
+                style: GoogleFonts.poppins(
+                  textStyle: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
                 ),
               ),
               Text(
                 subtitle,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: Colors.black54,
+                style: GoogleFonts.poppins(
+                  textStyle: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.black54,
+                  ),
                 ),
               ),
             ],

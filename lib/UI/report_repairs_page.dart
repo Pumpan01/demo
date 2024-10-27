@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart'; // สำหรับการเลือกภาพจากอุปกรณ์
-import 'dart:io'; // สำหรับการใช้งานไฟล์
+import 'package:image_picker/image_picker.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'dart:io';
 
 class ReportRepairsPage extends StatefulWidget {
   const ReportRepairsPage({super.key});
@@ -11,12 +13,11 @@ class ReportRepairsPage extends StatefulWidget {
 
 class _ReportRepairsPageState extends State<ReportRepairsPage> {
   final TextEditingController _detailsController = TextEditingController();
-  String _selectedCategory = 'แจ้งซ่อม'; // ค่าเริ่มต้นของประเภทการแจ้ง
-  String _selectedRepairType = 'ไฟฟ้า'; // ค่าเริ่มต้นของประเภทการซ่อม
-  XFile? _imageFile; // สำหรับเก็บไฟล์ภาพที่แนบ
+  String _selectedCategory = 'แจ้งซ่อม';
+  String _selectedRepairType = 'ไฟฟ้า';
+  XFile? _imageFile;
   final ImagePicker _picker = ImagePicker();
 
-  // ฟังก์ชันเลือกภาพจาก Gallery
   Future<void> _pickImage() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     setState(() {
@@ -24,27 +25,40 @@ class _ReportRepairsPageState extends State<ReportRepairsPage> {
     });
   }
 
-  // ฟังก์ชันแสดง Popup เมื่อส่งแจ้งซ่อมหรือร้องเรียนสำเร็จ
   Future<void> _showSuccessPopup(BuildContext context) async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // ห้ามปิด Popup โดยการคลิกข้างนอก
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('ส่งเรื่องเรียบร้อย'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: const <Widget>[
-                Text('การแจ้งของคุณได้ถูกส่งเรียบร้อยแล้ว'),
-              ],
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          title: Center(
+            child: Text(
+              'ส่งเรื่องเรียบร้อย',
+              style: GoogleFonts.prompt(
+                textStyle: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.orange,
+                ),
+              ),
             ),
           ),
+          content: const Text(
+            'การแจ้งของคุณได้ถูกส่งเรียบร้อยแล้ว',
+            textAlign: TextAlign.center,
+          ),
           actions: <Widget>[
-            TextButton(
-              child: const Text('ตกลง'),
-              onPressed: () {
-                Navigator.of(context).pop(); // ปิด Popup
-              },
+            Center(
+              child: TextButton(
+                child: Text(
+                  'ตกลง',
+                  style: GoogleFonts.prompt(color: Colors.orange),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
             ),
           ],
         );
@@ -52,18 +66,13 @@ class _ReportRepairsPageState extends State<ReportRepairsPage> {
     );
   }
 
-  // ฟังก์ชันส่งเรื่องแจ้งซ่อมหรือร้องเรียน
   void _submitReport() {
     if (_detailsController.text.isEmpty) {
-      // ถ้ารายละเอียดว่าง ให้แสดงการแจ้งเตือน
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('กรุณากรอกรายละเอียดปัญหา')),
       );
     } else {
-      // แสดง Popup แจ้งเตือนสำเร็จ
       _showSuccessPopup(context);
-
-      // ล้างข้อมูลฟอร์มหลังจากการส่ง
       _detailsController.clear();
       setState(() {
         _imageFile = null;
@@ -74,83 +83,61 @@ class _ReportRepairsPageState extends State<ReportRepairsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
-        title: const Text('แจ้งซ่อมและร้องเรียนปัญหา'),
+        title: Text(
+          'แจ้งซ่อมและร้องเรียนปัญหา',
+          style: GoogleFonts.prompt(),
+        ),
         backgroundColor: Colors.orange,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Text(
-                'ประเภทการแจ้ง:',
-                style: TextStyle(fontSize: 18),
-              ),
-              const SizedBox(height: 10),
-
-              // Dropdown สำหรับเลือกประเภทการแจ้ง (แจ้งซ่อม / ร้องเรียนปัญหา)
-              DropdownButtonFormField<String>(
+              _buildDropdown(
+                label: 'ประเภทการแจ้ง',
                 value: _selectedCategory,
-                items: ['แจ้งซ่อม', 'ร้องเรียนปัญหา']
-                    .map((category) => DropdownMenuItem(
-                          value: category,
-                          child: Text(category),
-                        ))
-                    .toList(),
+                items: ['แจ้งซ่อม', 'ร้องเรียนปัญหา'],
                 onChanged: (value) {
                   setState(() {
                     _selectedCategory = value!;
                   });
                 },
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                ),
               ),
-              const SizedBox(height: 20),
-
-              // Dropdown สำหรับเลือกประเภทการซ่อม (เมื่อเลือก "แจ้งซ่อม")
               if (_selectedCategory == 'แจ้งซ่อม') ...[
-                const Text(
-                  'ประเภทการซ่อม:',
-                  style: TextStyle(fontSize: 18),
-                ),
-                const SizedBox(height: 10),
-                DropdownButtonFormField<String>(
+                const SizedBox(height: 20),
+                _buildDropdown(
+                  label: 'ประเภทการซ่อม',
                   value: _selectedRepairType,
-                  items: ['ไฟฟ้า', 'ประปา', 'เครื่องใช้ไฟฟ้า', 'อื่นๆ']
-                      .map((type) => DropdownMenuItem(
-                            value: type,
-                            child: Text(type),
-                          ))
-                      .toList(),
+                  items: ['ไฟฟ้า', 'ประปา', 'เครื่องใช้ไฟฟ้า', 'อื่นๆ'],
                   onChanged: (value) {
                     setState(() {
                       _selectedRepairType = value!;
                     });
                   },
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                  ),
                 ),
-                const SizedBox(height: 20),
               ],
-
-              // ช่องกรอกรายละเอียดปัญหา
-              const Text(
+              const SizedBox(height: 20),
+              Text(
                 'รายละเอียดปัญหา:',
-                style: TextStyle(fontSize: 18),
+                style: GoogleFonts.prompt(
+                  textStyle: const TextStyle(fontSize: 18, color: Colors.orange),
+                ),
               ),
               const SizedBox(height: 10),
               TextField(
                 controller: _detailsController,
                 maxLines: 4,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                   hintText: 'กรอกรายละเอียดปัญหา...',
+                  filled: true,
+                  fillColor: Colors.white,
                 ),
               ),
               const SizedBox(height: 20),
@@ -158,38 +145,35 @@ class _ReportRepairsPageState extends State<ReportRepairsPage> {
               // ปุ่มแนบรูปภาพ
               ElevatedButton.icon(
                 onPressed: _pickImage,
-                icon: const Icon(Icons.camera_alt, color: Colors.white),
-                label: const Text(
+                icon: const Icon(FontAwesomeIcons.paperclip, color: Colors.white),
+                label: Text(
                   'แนบรูปภาพ',
-                  style: TextStyle(color: Colors.white),
+                  style: GoogleFonts.prompt(color: Colors.white),
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange,  // สีพื้นหลังของปุ่มเป็นสีส้ม
+                  backgroundColor: Colors.orange,
                   padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
 
-              // แสดงรูปภาพที่แนบ (ถ้ามี)
+              // แสดงชื่อไฟล์ที่แนบ (ถ้ามี)
               if (_imageFile != null)
-                Column(
-                  children: [
-                    const Text('รูปภาพที่แนบ:'),
-                    const SizedBox(height: 10),
-                    Image.file(
-                      File(_imageFile!.path),
-                      height: 200,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
+                Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Text(
+                    'ไฟล์ที่แนบ: ${_imageFile!.name}',
+                    style: GoogleFonts.prompt(
+                      textStyle: const TextStyle(fontSize: 14, color: Colors.green),
                     ),
-                    const SizedBox(height: 20),
-                  ],
+                  ),
                 ),
+              const SizedBox(height: 30), // เพิ่มระยะห่างระหว่างปุ่มแนบรูปและปุ่มส่งเรื่อง
 
-              // ปุ่มส่งเรื่องแจ้งซ่อมหรือร้องเรียน
+              // ปุ่มส่งเรื่อง
               Center(
                 child: ElevatedButton(
                   onPressed: _submitReport,
@@ -197,12 +181,14 @@ class _ReportRepairsPageState extends State<ReportRepairsPage> {
                     backgroundColor: Colors.green,
                     padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 80),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: const Text(
+                  child: Text(
                     'ส่งเรื่อง',
-                    style: TextStyle(fontSize: 18, color: Colors.white),
+                    style: GoogleFonts.prompt(
+                      textStyle: const TextStyle(fontSize: 18, color: Colors.white),
+                    ),
                   ),
                 ),
               ),
@@ -210,6 +196,42 @@ class _ReportRepairsPageState extends State<ReportRepairsPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildDropdown({
+    required String label,
+    required String value,
+    required List<String> items,
+    required ValueChanged<String?> onChanged,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: GoogleFonts.prompt(
+            textStyle: const TextStyle(fontSize: 18, color: Colors.orange),
+          ),
+        ),
+        const SizedBox(height: 10),
+        DropdownButtonFormField<String>(
+          value: value,
+          items: items
+              .map((item) => DropdownMenuItem(
+                    value: item,
+                    child: Text(item, style: GoogleFonts.prompt()),
+                  ))
+              .toList(),
+          onChanged: onChanged,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+            filled: true,
+            fillColor: Colors.white,
+          ),
+        ),
+      ],
     );
   }
 }

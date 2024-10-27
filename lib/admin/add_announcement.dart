@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AddAnnouncementPage extends StatefulWidget {
   const AddAnnouncementPage({super.key});
@@ -12,14 +13,12 @@ class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _detailController = TextEditingController();
 
-  // ฟังก์ชันสำหรับบันทึกประกาศใหม่
   void _saveAnnouncement() {
     if (_formKey.currentState!.validate()) {
-      // สมมุติว่าประกาศถูกบันทึกแล้ว (ในอนาคตสามารถเชื่อมต่อกับ API ได้)
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('บันทึกประกาศเรียบร้อย')),
       );
-      Navigator.pop(context); // กลับไปหน้าก่อนหน้า
+      Navigator.pop(context);
     }
   }
 
@@ -34,7 +33,10 @@ class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('เพิ่มประกาศใหม่'),
+        title: Text(
+          'เพิ่มประกาศใหม่',
+          style: GoogleFonts.prompt(),
+        ),
         backgroundColor: Colors.orange,
       ),
       body: Padding(
@@ -45,26 +47,29 @@ class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'สร้างประกาศใหม่',
-                  style: TextStyle(
-                    fontSize: 24, 
-                    fontWeight: FontWeight.bold, 
-                    color: Colors.orange,
+                  style: GoogleFonts.prompt(
+                    textStyle: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.orange,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 20),
-                
+
                 // ช่องกรอกชื่อประกาศ
                 TextFormField(
                   controller: _titleController,
                   decoration: InputDecoration(
                     labelText: 'ชื่อประกาศ',
+                    labelStyle: GoogleFonts.prompt(),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12), // โค้งมน
+                      borderRadius: BorderRadius.circular(12),
                     ),
                     filled: true,
-                    fillColor: Colors.grey[200], // พื้นหลังสีเทาอ่อน
+                    fillColor: Colors.grey[200],
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -81,11 +86,12 @@ class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
                   maxLines: 5,
                   decoration: InputDecoration(
                     labelText: 'รายละเอียดประกาศ',
+                    labelStyle: GoogleFonts.prompt(),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12), // โค้งมน
+                      borderRadius: BorderRadius.circular(12),
                     ),
                     filled: true,
-                    fillColor: Colors.grey[200], // พื้นหลังสีเทาอ่อน
+                    fillColor: Colors.grey[200],
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -102,19 +108,24 @@ class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
                     onPressed: _saveAnnouncement,
                     icon: const Icon(Icons.save, color: Colors.white),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orange, // สีส้มสำหรับปุ่ม
+                      backgroundColor: Colors.orange,
                       padding: const EdgeInsets.symmetric(
                         vertical: 15,
                         horizontal: 40,
                       ),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30), // โค้งมน
+                        borderRadius: BorderRadius.circular(30),
                       ),
-                      elevation: 5, // เพิ่มเงาให้ปุ่มดูเด่นขึ้น
+                      elevation: 5,
                     ),
-                    label: const Text(
+                    label: Text(
                       'บันทึกประกาศ',
-                      style: TextStyle(fontSize: 18, color: Colors.white),
+                      style: GoogleFonts.prompt(
+                        textStyle: const TextStyle(
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                   ),
                 ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class EditAnnouncementPage extends StatefulWidget {
   final int announcementId;
@@ -28,14 +29,12 @@ class _EditAnnouncementPageState extends State<EditAnnouncementPage> {
     _detailController = TextEditingController(text: widget.announcementDetail);
   }
 
-  // ฟังก์ชันสำหรับบันทึกการแก้ไขประกาศ
   void _saveEditedAnnouncement() {
     if (_formKey.currentState!.validate()) {
-      // คุณสามารถเชื่อมต่อกับ API เพื่อบันทึกประกาศแก้ไขได้ที่นี่
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('บันทึกการแก้ไขประกาศเรียบร้อย')),
       );
-      Navigator.pop(context); // กลับไปหน้าก่อนหน้า
+      Navigator.pop(context); 
     }
   }
 
@@ -50,7 +49,10 @@ class _EditAnnouncementPageState extends State<EditAnnouncementPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('แก้ไขประกาศ'),
+        title: Text(
+          'แก้ไขประกาศ',
+          style: GoogleFonts.prompt(),
+        ),
         backgroundColor: Colors.orange,
       ),
       body: Padding(
@@ -61,12 +63,14 @@ class _EditAnnouncementPageState extends State<EditAnnouncementPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'แก้ไขประกาศ',
-                  style: TextStyle(
-                    fontSize: 24, 
-                    fontWeight: FontWeight.bold, 
-                    color: Colors.orange,
+                  style: GoogleFonts.prompt(
+                    textStyle: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.orange,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -76,11 +80,12 @@ class _EditAnnouncementPageState extends State<EditAnnouncementPage> {
                   controller: _titleController,
                   decoration: InputDecoration(
                     labelText: 'ชื่อประกาศ',
+                    labelStyle: GoogleFonts.prompt(),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12), // มุมโค้งมน
+                      borderRadius: BorderRadius.circular(12),
                     ),
                     filled: true,
-                    fillColor: Colors.grey[100], // สีพื้นหลังช่องกรอก
+                    fillColor: Colors.grey[100],
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -97,11 +102,12 @@ class _EditAnnouncementPageState extends State<EditAnnouncementPage> {
                   maxLines: 5,
                   decoration: InputDecoration(
                     labelText: 'รายละเอียดประกาศ',
+                    labelStyle: GoogleFonts.prompt(),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12), // มุมโค้งมน
+                      borderRadius: BorderRadius.circular(12),
                     ),
                     filled: true,
-                    fillColor: Colors.grey[100], // สีพื้นหลังช่องกรอก
+                    fillColor: Colors.grey[100],
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -124,12 +130,17 @@ class _EditAnnouncementPageState extends State<EditAnnouncementPage> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
-                      backgroundColor: Colors.orange, // สีปุ่มเป็นสีส้ม
+                      backgroundColor: Colors.orange,
                     ),
-                    icon: const Icon(Icons.save, color: Colors.white), // ไอคอนบันทึก
-                    label: const Text(
+                    icon: const Icon(Icons.save, color: Colors.white),
+                    label: Text(
                       'บันทึกการแก้ไข',
-                      style: TextStyle(fontSize: 18, color: Colors.white),
+                      style: GoogleFonts.prompt(
+                        textStyle: const TextStyle(
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                   ),
                 ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class EditBillPage extends StatefulWidget {
   final int roomNumber;
@@ -13,15 +14,12 @@ class EditBillPage extends StatefulWidget {
 class _EditBillPageState extends State<EditBillPage> {
   final TextEditingController _roomPriceController = TextEditingController();
   final TextEditingController _waterPriceController = TextEditingController();
-  final TextEditingController _electricityPriceController =
-      TextEditingController();
-  String? _slipPath; // เก็บ path ของสลิปการชำระเงิน
+  final TextEditingController _electricityPriceController = TextEditingController();
+  String? _slipPath;
 
-  // ฟังก์ชันเลือกไฟล์สลิป
   Future<void> _pickSlip() async {
-    final ImagePicker picker = ImagePicker();
-    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-
+    final picker = ImagePicker();
+    final image = await picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
       setState(() {
         _slipPath = image.path;
@@ -33,8 +31,12 @@ class _EditBillPageState extends State<EditBillPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('แก้ไขบิลห้อง ${widget.roomNumber}'),
+        title: Text(
+          'แก้ไขบิลห้อง ${widget.roomNumber}',
+          style: GoogleFonts.poppins(fontSize: 22, fontWeight: FontWeight.bold),
+        ),
         backgroundColor: Colors.orange,
+        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -42,77 +44,29 @@ class _EditBillPageState extends State<EditBillPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'ค่าเช่าห้อง (บาท):',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 10),
-              TextField(
-                controller: _roomPriceController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  hintText: 'กรอกค่าเช่าห้อง',
-                  filled: true,
-                  fillColor: Colors.grey[100],
-                ),
-              ),
+              _buildLabel('ค่าเช่าห้อง (บาท):'),
+              _buildTextField(_roomPriceController, 'กรอกค่าเช่าห้อง'),
               const SizedBox(height: 20),
 
-              const Text(
-                'ค่าน้ำ (หน่วย):',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 10),
-              TextField(
-                controller: _waterPriceController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  hintText: 'กรอกค่าน้ำ',
-                  filled: true,
-                  fillColor: Colors.grey[100],
-                ),
-              ),
+              _buildLabel('ค่าน้ำ (หน่วย):'),
+              _buildTextField(_waterPriceController, 'กรอกค่าน้ำ'),
               const SizedBox(height: 20),
 
-              const Text(
-                'ค่าไฟ (หน่วย):',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 10),
-              TextField(
-                controller: _electricityPriceController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  hintText: 'กรอกค่าไฟ',
-                  filled: true,
-                  fillColor: Colors.grey[100],
-                ),
-              ),
+              _buildLabel('ค่าไฟ (หน่วย):'),
+              _buildTextField(_electricityPriceController, 'กรอกค่าไฟ'),
               const SizedBox(height: 20),
 
-              // ปุ่มอัพโหลดสลิป
               Center(
                 child: ElevatedButton.icon(
                   onPressed: _pickSlip,
-                  icon: const Icon(Icons.upload_file,
-                      color: Colors.white), // ไอคอนสีขาว
+                  icon: const Icon(Icons.upload_file, color: Colors.white),
                   label: const Text(
                     'แนบรูป',
-                    style: TextStyle(color: Colors.white), // ตัวหนังสือสีขาว
+                    style: TextStyle(color: Colors.white),
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.orange,
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 15, horizontal: 30),
+                    padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
@@ -122,10 +76,9 @@ class _EditBillPageState extends State<EditBillPage> {
 
               const SizedBox(height: 10),
 
-              // แสดงสถานะการแนบสลิป
               _slipPath != null
                   ? Text(
-                      'มีสลิปแนบแล้ว: $_slipPath',
+                      'มีสลิปแนบแล้ว: ${_slipPath!.split('/').last}',
                       style: const TextStyle(fontSize: 16, color: Colors.green),
                     )
                   : const Text(
@@ -134,11 +87,9 @@ class _EditBillPageState extends State<EditBillPage> {
                     ),
               const SizedBox(height: 20),
 
-              // ปุ่มบันทึกการแก้ไข
               Center(
                 child: ElevatedButton(
                   onPressed: () {
-                    // บันทึกข้อมูลและส่งให้ลูกบ้าน
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('บันทึกข้อมูลเรียบร้อย')),
                     );
@@ -146,8 +97,7 @@ class _EditBillPageState extends State<EditBillPage> {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 15, horizontal: 80),
+                    padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 80),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
@@ -162,6 +112,32 @@ class _EditBillPageState extends State<EditBillPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildLabel(String text) {
+    return Text(
+      text,
+      style: GoogleFonts.poppins(
+        textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+
+  Widget _buildTextField(TextEditingController controller, String hintText) {
+    return TextField(
+      controller: controller,
+      keyboardType: TextInputType.number,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        hintText: hintText,
+        hintStyle: GoogleFonts.poppins(color: Colors.grey[400]),
+        filled: true,
+        fillColor: Colors.grey[100],
+      ),
+      style: GoogleFonts.poppins(),
     );
   }
 }

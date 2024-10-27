@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart'; // สำหรับการเลือกภาพจากอุปกรณ์
-import 'dart:io'; // สำหรับการใช้งานไฟล์
+import 'package:image_picker/image_picker.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'dart:io';
 
 class WaterBillPage extends StatefulWidget {
   const WaterBillPage({super.key});
@@ -10,61 +12,160 @@ class WaterBillPage extends StatefulWidget {
 }
 
 class _WaterBillPageState extends State<WaterBillPage> {
-  XFile? _slipImage; // ตัวแปรเก็บรูปสลิปที่แนบ
+  XFile? _slipImage;
+  final double roomCharge = 3000;
+  final double waterCharge = 250;
+  final double electricityCharge = 200;
+  bool _showSlipLink = false;
 
-  // ฟังก์ชันเลือกภาพจาก Gallery
-  Future<void> _pickImage() async {
-    final ImagePicker picker = ImagePicker();
-    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+  Future<void> _pickImage(StateSetter setState) async {
+    final picker = ImagePicker();
+    final image = await picker.pickImage(source: ImageSource.gallery);
     setState(() {
       _slipImage = image;
+      _showSlipLink = true;
     });
   }
 
-  // ฟังก์ชันส่งสลิป
-  void _sendSlip() {
-    if (_slipImage != null) {
-      // แสดง Popup ว่าส่งสลิปสำเร็จ
-      _showAlertDialog('สำเร็จ', 'ส่งสลิปเรียบร้อย', Icons.check_circle);
+  void _showPaymentPopup() {
+    setState(() {
+      _showSlipLink = false;
+    });
 
-      // ล้างข้อมูลรูปสลิปที่แนบไว้
-      setState(() {
-        _slipImage = null; // ทำให้รูปหายไปหลังจากกดส่ง
-      });
-    } else {
-      // ถ้าไม่มีรูป ให้แสดงข้อความเตือนเป็น Popup
-      _showAlertDialog(
-          'ข้อผิดพลาด', 'กรุณาแนบสลิปก่อนส่ง', Icons.error_outline);
-    }
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              title: Center(
+                child: Text(
+                  'สแกนและแนบสลิป',
+                  style: GoogleFonts.prompt(
+                    textStyle: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.orange,
+                    ),
+                  ),
+                ),
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset(
+                    'images/QR.png', // ใช้เส้นทางนี้ตามที่ตั้งใน pubspec.yaml
+                    height: 150,
+                    width: 150,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return const Text('ไม่พบ QR Code');
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  _billDetailRow(
+                      FontAwesomeIcons.water, 'ค่าน้ำ', '$waterCharge บาท'),
+                  _billDetailRow(
+                      FontAwesomeIcons.bolt, 'ค่าไฟ', '$electricityCharge บาท'),
+                  _billDetailRow(
+                      FontAwesomeIcons.house, 'ค่าห้อง', '$roomCharge บาท'),
+                  const SizedBox(height: 20),
+                  ElevatedButton.icon(
+                    onPressed: () => _pickImage(setState),
+                    icon: const Icon(Icons.upload_file, color: Colors.white),
+                    label: const Text('แนบสลิปการโอน',
+                        style: TextStyle(color: Colors.white)),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.orange,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  if (_slipImage != null && _showSlipLink)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Text(
+                        'ไฟล์สลิปที่แนบ: ${_slipImage!.name}',
+                        style:
+                            const TextStyle(fontSize: 14, color: Colors.green),
+                      ),
+                    ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_slipImage != null) {
+                        Navigator.of(context).pop();
+                        _sendSlipToAdmin();
+                        setState(() {
+                          _showSlipLink = false;
+                        });
+                        _showConfirmationPopup(success: true);
+                      } else {
+                        _showConfirmationPopup(success: false);
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: const Text('ส่งสลิป',
+                        style: TextStyle(color: Colors.white)),
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child:
+                      const Text('ปิด', style: TextStyle(color: Colors.orange)),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 
-  // ฟังก์ชันแสดง AlertDialog พร้อมตกแต่ง
-  Future<void> _showAlertDialog(
-      String title, String message, IconData icon) async {
-    return showDialog<void>(
+  void _sendSlipToAdmin() {
+    print("ส่งไฟล์ไปยังแอดมิน: ${_slipImage?.path}");
+  }
+
+  void _showConfirmationPopup({required bool success}) {
+    showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15), // มุมโค้งมน
+            borderRadius: BorderRadius.circular(15),
           ),
           title: Row(
             children: [
-              Icon(icon, color: Colors.orange), // ใส่ไอคอนแจ้งเตือน
+              Icon(success ? Icons.check_circle : Icons.error,
+                  color: success ? Colors.green : Colors.red),
               const SizedBox(width: 10),
-              Text(title),
+              Text(success ? 'สำเร็จ' : 'ไม่สำเร็จ',
+                  style: GoogleFonts.prompt()),
             ],
           ),
-          content: Text(message, style: const TextStyle(fontSize: 16)),
-          actions: <Widget>[
+          content: Text(
+            success ? 'ส่งสลิปเรียบร้อย' : 'กรุณาแนบสลิปก่อนส่ง',
+            style: const TextStyle(fontSize: 16),
+          ),
+          actions: [
             TextButton(
-              child: const Text(
-                'ตกลง',
-                style: TextStyle(fontSize: 18, color: Colors.orange),
-              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
+              child: const Text('ตกลง', style: TextStyle(color: Colors.orange)),
             ),
           ],
         );
@@ -74,182 +175,136 @@ class _WaterBillPageState extends State<WaterBillPage> {
 
   @override
   Widget build(BuildContext context) {
+    final double totalCharge = roomCharge + waterCharge + electricityCharge;
     return Scaffold(
+      backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
-        title: const Text('บิลค่าน้ำค่าไฟ'),
+        title: Text('รายละเอียดการชำระเงิน', style: GoogleFonts.prompt()),
         backgroundColor: Colors.orange,
       ),
-      body: Center(
-        // ใช้ Center widget เพื่อให้ทุกอย่างอยู่กึ่งกลางแนวตั้ง-แนวนอน
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment:
-                  MainAxisAlignment.center, // จัดให้อยู่ตรงกลางแนวตั้ง
-              crossAxisAlignment:
-                  CrossAxisAlignment.center, // จัดให้อยู่ตรงกลางแนวนอน
-              children: [
-                // การ์ดสำหรับแสดงข้อมูลบิล
-                Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  elevation: 5,
-                  shadowColor: Colors.grey.withOpacity(0.5),
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.3),
+                      spreadRadius: 3,
+                      blurRadius: 5,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
                       children: [
-                        const Text(
-                          'รายละเอียดบิลค่าน้ำค่าไฟ',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.orange,
+                        Icon(Icons.receipt_long,
+                            color: Colors.orange, size: 30),
+                        const SizedBox(width: 10),
+                        Text(
+                          'รายละเอียดบิล',
+                          style: GoogleFonts.prompt(
+                            textStyle: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.orange,
+                            ),
                           ),
                         ),
-                        const SizedBox(height: 20),
-
-                        // แสดงค่าน้ำและค่าไฟ (ข้อมูลสมมุติ)
-                        const Text(
-                          'ค่าน้ำ: 25 หน่วย (250 บาท)',
-                          style: TextStyle(fontSize: 18, color: Colors.black87),
-                        ),
-                        const SizedBox(height: 10),
-                        const Text(
-                          'ค่าไฟ: 40 หน่วย (200 บาท)',
-                          style: TextStyle(fontSize: 18, color: Colors.black87),
-                        ),
-                        const SizedBox(height: 10),
-
-                        // สมมุติยอดรวมที่ต้องชำระ
-                        const Text(
-                          'ยอดรวมที่ต้องชำระ: 450 บาท',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.redAccent,
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-
-                        // QR Code สำหรับการสแกนจ่าย
-                        Container(
-                          height: 200,
-                          width: 200,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                                color: const Color.fromARGB(255, 255, 255, 255),
-                                width: 2),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.3),
-                                spreadRadius: 3,
-                                blurRadius: 5,
-                                offset: const Offset(0, 3),
-                              ),
-                            ],
-                          ),
-                          child: _buildQrImage(), // ฟังก์ชันแสดงภาพ QR
-                        ),
-                        const SizedBox(height: 20),
                       ],
                     ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-
-                // ปุ่มเลือกแนบสลิป
-                ElevatedButton.icon(
-                  onPressed: _pickImage,
-                  icon: const Icon(Icons.upload_file,
-                      color: Colors.white), // ไอคอนสีขาว
-                  label: const Text(
-                    'แนบสลิปการโอน',
-                    style: TextStyle(color: Colors.white), // ตัวหนังสือสีขาว
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange, // พื้นหลังสีส้ม
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 15, horizontal: 30),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-
-                // แสดงภาพสลิปที่แนบ (ถ้ามี)
-                if (_slipImage != null)
-                  Column(
-                    children: [
-                      const Text(
-                        'สลิปที่แนบ:',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 10),
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey, width: 2),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.file(
-                            File(_slipImage!.path),
-                            height: 150,
-                            width: 150,
-                            fit: BoxFit.cover,
+                    const SizedBox(height: 20),
+                    _billDetailRow(
+                        FontAwesomeIcons.water, 'ค่าน้ำ', '$waterCharge บาท'),
+                    _billDetailRow(FontAwesomeIcons.bolt, 'ค่าไฟ',
+                        '$electricityCharge บาท'),
+                    _billDetailRow(
+                        FontAwesomeIcons.house, 'ค่าห้อง', '$roomCharge บาท'),
+                    const Divider(color: Colors.grey),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'ยอดรวมที่ต้องชำระ',
+                          style: GoogleFonts.prompt(
+                            textStyle: TextStyle(
+                                fontSize: 18,
+                                color: Colors.black87,
+                                fontWeight: FontWeight.bold),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 20),
-                    ],
-                  ),
-
-                // ปุ่มส่งสลิป
-                ElevatedButton(
-                  onPressed:
-                      _sendSlip, // ใช้ฟังก์ชัน _sendSlip เพื่อส่งสลิปและแสดงแจ้งเตือน
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 15, horizontal: 80),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
+                        Text(
+                          '$totalCharge บาท',
+                          style: GoogleFonts.prompt(
+                            textStyle: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.redAccent),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  child: const Text(
-                    'ส่งสลิป',
-                    style: TextStyle(fontSize: 18, color: Colors.white),
+                    const SizedBox(height: 20),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton.icon(
+                onPressed: _showPaymentPopup,
+                icon: const Icon(Icons.payment, color: Colors.white),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.orange,
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
                   ),
                 ),
-              ],
-            ),
+                label: const Text(
+                  'ชำระเงิน',
+                  style: TextStyle(fontSize: 18, color: Colors.white),
+                ),
+              )
+            ],
           ),
         ),
       ),
     );
   }
 
-  // ฟังก์ชันสร้างภาพ QR Code
-  Widget _buildQrImage() {
-    return Image.asset(
-      'images/QR.png', // ใช้ชื่อไฟล์ QR.png ที่คุณมีในโฟลเดอร์ images
-      fit: BoxFit.contain,
-      errorBuilder: (context, error, stackTrace) {
-        return const Center(
-          child: Text(
-            'ไม่พบ QR Code',
-            style: TextStyle(color: Colors.red),
+  Widget _billDetailRow(IconData icon, String title, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: Row(
+        children: [
+          Icon(icon, color: Colors.orange, size: 20),
+          const SizedBox(width: 10),
+          Text(
+            title,
+            style: GoogleFonts.prompt(
+              textStyle: TextStyle(fontSize: 16, color: Colors.grey),
+            ),
           ),
-        );
-      },
+          const Spacer(),
+          Text(
+            value,
+            style: GoogleFonts.prompt(
+              textStyle: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

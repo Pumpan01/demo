@@ -10,17 +10,26 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  convex_bottom_bar: ^3.0.0
-  curved_navigation_bar: ^1.0.3
-  image_picker: ^0.8.7+3 # สำหรับการเลือกและถ่ายภาพ
-  cupertino_icons: ^1.0.8
-  url_launcher: ^6.0.20
-  intl: ^0.17.0
+  convex_bottom_bar: 
+  curved_navigation_bar: 
+  image_picker:  # สำหรับการเลือกและถ่ายภาพ
+  cupertino_icons: 
+  url_launcher: 
+  intl: 
+  animated_text_kit: 
+  lottie: 
+  provider: 
+  font_awesome_flutter: 
+  flutter_animated_icons: 
+  shimmer: 
+  flutter_spinkit: 
+  awesome_dialog: 
+  google_fonts: 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^4.0.0
+  flutter_lints: 
 
 flutter:
   uses-material-design: true

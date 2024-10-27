@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'add_announcement.dart';
 import 'edit_announcement.dart';
 
@@ -11,7 +12,6 @@ class ManageAnnouncementsPage extends StatefulWidget {
 }
 
 class _ManageAnnouncementsPageState extends State<ManageAnnouncementsPage> {
-  // ตัวอย่างรายการประกาศแบบจำลอง (สามารถเชื่อมต่อกับ API หรือฐานข้อมูลได้ในอนาคต)
   List<Map<String, String>> announcements = [
     {'title': 'ประกาศที่ 1', 'detail': 'วันที่ 1 มีนาคม 2565 น้ำไม่ไหล'},
     {'title': 'ประกาศที่ 2', 'detail': 'วันที่ 2 มีนาคม 2565 ไฟฟ้าใช้งานไม่ได้'},
@@ -20,7 +20,6 @@ class _ManageAnnouncementsPageState extends State<ManageAnnouncementsPage> {
     {'title': 'ประกาศที่ 5', 'detail': 'วันที่ 5 มีนาคม 2565 ซ่อมไฟฟ้าตึก2'},
   ];
 
-  // ฟังก์ชันลบประกาศ
   void _deleteAnnouncement(int index) {
     showDialog(
       context: context,
@@ -31,20 +30,23 @@ class _ManageAnnouncementsPageState extends State<ManageAnnouncementsPage> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.pop(context); // ปิด dialog ถ้าไม่ต้องการลบ
+                Navigator.pop(context);
               },
-              child: const Text('ยกเลิก'),
+              child: const Text('ยกเลิก', style: TextStyle(color: Colors.grey)),
             ),
-            TextButton(
+            ElevatedButton(
               onPressed: () {
                 setState(() {
-                  announcements.removeAt(index); // ลบประกาศตาม index
+                  announcements.removeAt(index);
                 });
-                Navigator.pop(context); // ปิด dialog หลังจากลบสำเร็จ
+                Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('ลบประกาศเรียบร้อย')),
                 );
               },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+              ),
               child: const Text('ลบ'),
             ),
           ],
@@ -57,7 +59,10 @@ class _ManageAnnouncementsPageState extends State<ManageAnnouncementsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('จัดการประกาศ'),
+        title: Text(
+          'จัดการประกาศ',
+          style: GoogleFonts.poppins(),
+        ),
         backgroundColor: Colors.orange,
       ),
       body: Padding(
@@ -65,14 +70,20 @@ class _ManageAnnouncementsPageState extends State<ManageAnnouncementsPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'ประกาศปัจจุบัน',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              style: GoogleFonts.poppins(
+                textStyle: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.orange,
+                ),
+              ),
             ),
             const SizedBox(height: 20),
             Expanded(
               child: ListView.builder(
-                itemCount: announcements.length, // ใช้จำนวนประกาศจากรายการจำลอง
+                itemCount: announcements.length,
                 itemBuilder: (context, index) {
                   return _buildAnnouncementCard(context, index);
                 },
@@ -89,21 +100,21 @@ class _ManageAnnouncementsPageState extends State<ManageAnnouncementsPage> {
                     ),
                   );
                 },
-                icon: const Icon(Icons.add, color: Colors.white), // ไอคอนสีขาว
+                icon: const Icon(Icons.add, color: Colors.white),
                 label: const Text(
                   'เพิ่มประกาศใหม่',
                   style: TextStyle(
                     fontSize: 18,
-                    color: Colors.white, // ตัวอักษรสีขาว
+                    color: Colors.white,
                   ),
                 ),
                 style: ElevatedButton.styleFrom(
                   padding:
                       const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30), // ปรับขอบโค้งมน
+                    borderRadius: BorderRadius.circular(30),
                   ),
-                  backgroundColor: Colors.orange, // พื้นหลังสีส้ม
+                  backgroundColor: Colors.orange,
                 ),
               ),
             ),
@@ -113,26 +124,37 @@ class _ManageAnnouncementsPageState extends State<ManageAnnouncementsPage> {
     );
   }
 
-  // ฟังก์ชันสำหรับสร้าง Card ของแต่ละประกาศ
   Widget _buildAnnouncementCard(BuildContext context, int index) {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
       ),
-      elevation: 4,
+      elevation: 3,
+      color: Colors.white,
       margin: const EdgeInsets.symmetric(vertical: 8),
       child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: ListTile(
           title: Text(
             announcements[index]['title']!,
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: GoogleFonts.poppins(
+              textStyle: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+            ),
           ),
           subtitle: Padding(
             padding: const EdgeInsets.only(top: 5),
             child: Text(
               announcements[index]['detail']!,
-              style: const TextStyle(fontSize: 16, color: Colors.black54),
+              style: GoogleFonts.poppins(
+                textStyle: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.black54,
+                ),
+              ),
             ),
           ),
           trailing: Row(
@@ -140,7 +162,6 @@ class _ManageAnnouncementsPageState extends State<ManageAnnouncementsPage> {
             children: [
               OutlinedButton(
                 onPressed: () {
-                  // นำไปหน้าแก้ไขประกาศ
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -153,10 +174,10 @@ class _ManageAnnouncementsPageState extends State<ManageAnnouncementsPage> {
                   );
                 },
                 style: OutlinedButton.styleFrom(
+                  side: const BorderSide(color: Colors.orange),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
-                  side: const BorderSide(color: Colors.orange),
                 ),
                 child: const Text(
                   'แก้ไข',
@@ -167,7 +188,7 @@ class _ManageAnnouncementsPageState extends State<ManageAnnouncementsPage> {
               IconButton(
                 icon: const Icon(Icons.delete, color: Colors.red),
                 onPressed: () {
-                  _deleteAnnouncement(index); // ฟังก์ชันลบประกาศ
+                  _deleteAnnouncement(index);
                 },
               ),
             ],

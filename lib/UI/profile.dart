@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import '../login.dart'; // นำเข้าไฟล์ login.dart
+import 'package:google_fonts/google_fonts.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../login.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -8,12 +10,14 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.orange, // ใช้สีส้มสำหรับ AppBar
+        backgroundColor: Colors.orange,
         elevation: 0,
         centerTitle: true,
-        title: const Text(
+        title: Text(
           'ข้อมูลห้องพัก',
-          style: TextStyle(color: Colors.white, fontSize: 24),
+          style: GoogleFonts.poppins(
+            textStyle: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -40,12 +44,10 @@ class ProfilePage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'ข้อมูลผู้เช่า',
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.orange,
+                      style: GoogleFonts.poppins(
+                        textStyle: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.orange),
                       ),
                     ),
                     const Divider(
@@ -55,46 +57,36 @@ class ProfilePage extends StatelessWidget {
                     ),
                     const SizedBox(height: 10),
 
-                    // ชื่อผู้เช่า
+                    // ข้อมูลผู้เช่า
                     _buildInfoRow(
                       label: 'ชื่อเต็ม',
-                      value: 'นายสมชาย ใจดี',
-                      icon: Icons.person_outline,
+                      value: 'นายภูมพาน นิลนวล',
+                      icon: FontAwesomeIcons.user,
                     ),
-
-                    // เบอร์โทรศัพท์
                     _buildInfoRow(
                       label: 'เบอร์โทรศัพท์',
                       value: '098-765-4321',
-                      icon: Icons.phone_outlined,
+                      icon: FontAwesomeIcons.phone,
                     ),
-
-                    // เลขห้อง
                     _buildInfoRow(
                       label: 'ห้องพัก',
                       value: '101 (ห้องแอร์)',
-                      icon: Icons.meeting_room_outlined,
+                      icon: FontAwesomeIcons.doorClosed,
                     ),
-
-                    // ค่าเช่ารายเดือน
                     _buildInfoRow(
                       label: 'ค่าเช่ารายเดือน',
                       value: '3200 บาท',
-                      icon: Icons.attach_money_outlined,
+                      icon: FontAwesomeIcons.moneyBillWave,
                     ),
-
-                    // ผู้ติดต่อฉุกเฉิน
                     _buildInfoRow(
                       label: 'ผู้ติดต่อฉุกเฉิน',
-                      value: 'นายสมปอง ใจดี (089-123-4567)',
-                      icon: Icons.contact_phone_outlined,
+                      value: 'นายวิชญพัฒน์ เชาวนีรนาท (089-123-4567)',
+                      icon: FontAwesomeIcons.phoneSquareAlt,
                     ),
-
-                    // Line ID
                     _buildInfoRow(
                       label: 'Line ID',
-                      value: 'somchai123',
-                      icon: Icons.message_outlined,
+                      value: 'ILOVEUHORPLUS01',
+                      icon: FontAwesomeIcons.line,
                     ),
                   ],
                 ),
@@ -104,14 +96,13 @@ class ProfilePage extends StatelessWidget {
               // ปุ่ม "ออกจากระบบ"
               ElevatedButton.icon(
                 onPressed: () {
-                  // เมื่อกดออกจากระบบ กลับไปที่หน้า Login
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()), // ไปหน้า LoginPage
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red, // ปุ่มสีแดง
+                  backgroundColor: Colors.red,
                   padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 80),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
@@ -119,13 +110,15 @@ class ProfilePage extends StatelessWidget {
                   shadowColor: Colors.redAccent,
                   elevation: 5,
                 ),
-                icon: const Icon(Icons.logout, color: Colors.white),
-                label: const Text(
+                icon: const Icon(FontAwesomeIcons.signOutAlt, color: Colors.white),
+                label: Text(
                   'ออกจากระบบ',
-                  style: TextStyle(fontSize: 18, color: Colors.white),
+                  style: GoogleFonts.poppins(
+                    textStyle: const TextStyle(fontSize: 18, color: Colors.white),
+                  ),
                 ),
               ),
-              const SizedBox(height: 20), // ช่องว่างด้านล่างปุ่ม Logout
+              const SizedBox(height: 20),
             ],
           ),
         ),
@@ -147,18 +140,14 @@ class ProfilePage extends StatelessWidget {
               children: [
                 Text(
                   label,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey,
+                  style: GoogleFonts.poppins(
+                    textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey),
                   ),
                 ),
                 Text(
                   value,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black87,
+                  style: GoogleFonts.poppins(
+                    textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black87),
                   ),
                 ),
               ],

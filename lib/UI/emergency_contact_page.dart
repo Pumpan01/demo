@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class EmergencyContactPage extends StatelessWidget {
   const EmergencyContactPage({super.key});
@@ -17,18 +18,30 @@ class EmergencyContactPage extends StatelessWidget {
     }
   }
 
-  // แสดง popup สำหรับการกดโทร
+  // ฟังก์ชันสำหรับแสดงป๊อปอัปยืนยันการโทร
   void _showCallPopup(BuildContext context, String name, String phoneNumber) {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('โทรหา $name', style: const TextStyle(fontWeight: FontWeight.bold)),
-          content: Text('เบอร์โทร: $phoneNumber'),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          title: Text(
+            'โทรหา $name',
+            style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+          ),
+          content: Text(
+            'เบอร์โทร: $phoneNumber',
+            style: GoogleFonts.poppins(),
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('ยกเลิก', style: TextStyle(color: Colors.red)),
+              child: Text(
+                'ยกเลิก',
+                style: GoogleFonts.poppins(color: Colors.red),
+              ),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -38,10 +51,13 @@ class EmergencyContactPage extends StatelessWidget {
                 ),
               ),
               onPressed: () {
-                Navigator.pop(context); // ปิด popup ก่อน
+                Navigator.pop(context); // ปิดป๊อปอัปก่อน
                 _makePhoneCall(phoneNumber); // โทรออก
               },
-              child: const Text('โทร', style: TextStyle(color: Colors.white)),
+              child: Text(
+                'โทร',
+                style: GoogleFonts.poppins(color: Colors.white),
+              ),
             ),
           ],
         );
@@ -53,8 +69,18 @@ class EmergencyContactPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('เบอร์ติดต่อฉุกเฉิน'),
+        title: Text(
+          'เบอร์ติดต่อฉุกเฉิน',
+          style: GoogleFonts.poppins(
+            textStyle: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+        ),
         backgroundColor: Colors.orange,
+        elevation: 0,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -119,7 +145,8 @@ class EmergencyContactPage extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
       ),
-      elevation: 3,  // เพิ่มเงาให้ card
+      color: Colors.white,
+      elevation: 3,
       margin: const EdgeInsets.symmetric(vertical: 8),
       child: ListTile(
         leading: CircleAvatar(
@@ -129,19 +156,44 @@ class EmergencyContactPage extends StatelessWidget {
         ),
         title: Text(
           title,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
+          style: GoogleFonts.poppins(
+            textStyle: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+              color: Colors.black87,
+            ),
           ),
         ),
         subtitle: Text(
           subtitle,
-          style: const TextStyle(
-            fontSize: 16,
-            color: Colors.black54,
+          style: GoogleFonts.poppins(
+            textStyle: const TextStyle(
+              fontSize: 16,
+              color: Colors.black54,
+            ),
           ),
         ),
-        onTap: () => _showCallPopup(context, title, phoneNumber),
+        trailing: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.green,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+          onPressed: () => _showCallPopup(context, title, phoneNumber), // แสดงป๊อปอัปก่อนโทร
+          child: Text(
+            'โทร',
+            style: GoogleFonts.poppins(
+              textStyle: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+        contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        onTap: () => _showCallPopup(context, title, phoneNumber), // แสดงป๊อปอัปเมื่อกดที่การ์ด
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'edit_bill_page.dart'; // นำเข้าไฟล์ edit_bill_page.dart เพื่อไปหน้าแก้ไขบิล
+import 'package:google_fonts/google_fonts.dart';
+import 'edit_bill_page.dart';
 
 class ManageBillsPage extends StatelessWidget {
   const ManageBillsPage({super.key});
@@ -8,20 +9,33 @@ class ManageBillsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('จัดการบิล'),
-        backgroundColor: Colors.orange, // เพิ่มสีพื้นหลัง AppBar ให้เป็นสีส้ม
+        title: Text(
+          'จัดการบิล',
+          style: GoogleFonts.poppins(
+            textStyle: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        backgroundColor: Colors.orange,
+        centerTitle: true,
+        elevation: 0,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'รายการบิลค้างชำระ',
-              style: TextStyle(
-                fontSize: 22, 
-                fontWeight: FontWeight.bold, 
-                color: Colors.orange, // เพิ่มสีตัวอักษร
+              style: GoogleFonts.poppins(
+                textStyle: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.orange,
+                ),
               ),
             ),
             const SizedBox(height: 20),
@@ -29,30 +43,43 @@ class ManageBillsPage extends StatelessWidget {
               child: ListView.builder(
                 itemCount: 10, // จำนวนห้องที่ต้องการแสดง
                 itemBuilder: (context, index) {
-                  return Card(
-                    elevation: 4, // เพิ่มเงาให้กับ Card
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15), // เพิ่มความโค้งมน
+                  return Container(
+                    margin: const EdgeInsets.symmetric(vertical: 8.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.3),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
                     ),
-                    margin: const EdgeInsets.symmetric(vertical: 10), // เพิ่มระยะห่างระหว่างการ์ด
                     child: ListTile(
+                      contentPadding: const EdgeInsets.all(16.0),
                       title: Text(
                         'ห้อง ${index + 1}',
-                        style: const TextStyle(
-                          fontSize: 18, 
-                          fontWeight: FontWeight.bold,
+                        style: GoogleFonts.poppins(
+                          textStyle: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
                         ),
                       ),
-                      subtitle: const Text(
+                      subtitle: Text(
                         'ยอดค้างชำระ: 3200 บาท',
-                        style: TextStyle(
-                          fontSize: 16, 
-                          color: Colors.black54, // เปลี่ยนสี subtitle ให้ดูอ่อนลง
+                        style: GoogleFonts.poppins(
+                          textStyle: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.black54,
+                          ),
                         ),
                       ),
                       trailing: ElevatedButton(
                         onPressed: () {
-                          // เมื่อกด "แก้ไข" จะไปหน้าแก้ไขบิล
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -62,15 +89,20 @@ class ManageBillsPage extends StatelessWidget {
                           );
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.orange, // ปรับสีปุ่มให้เป็นสีส้ม
+                          backgroundColor: Colors.orange,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30), // เพิ่มความโค้งมนให้ปุ่ม
+                            borderRadius: BorderRadius.circular(30),
                           ),
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                         ),
-                        child: const Text(
+                        child: Text(
                           'แก้ไข',
-                          style: TextStyle(color: Colors.white), // ตัวอักษรสีขาว
+                          style: GoogleFonts.poppins(
+                            textStyle: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                       ),
                     ),

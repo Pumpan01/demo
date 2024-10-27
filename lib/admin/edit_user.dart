@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class EditUserPage extends StatefulWidget {
   final String fullName;
@@ -63,8 +64,13 @@ class _EditUserPageState extends State<EditUserPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('แก้ไขข้อมูลผู้เช่า'),
-        backgroundColor: Colors.orange, // สี AppBar เป็นสีส้ม
+        title: Text(
+          'แก้ไขข้อมูลผู้เช่า',
+          style: GoogleFonts.prompt(
+            textStyle: const TextStyle(color: Colors.white, fontSize: 24),
+          ),
+        ),
+        backgroundColor: Colors.orange,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -72,55 +78,47 @@ class _EditUserPageState extends State<EditUserPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 'แก้ไขข้อมูลห้องพัก',
-                style: TextStyle(
-                  fontSize: 24, 
-                  fontWeight: FontWeight.bold, 
-                  color: Colors.orange,
+                style: GoogleFonts.prompt(
+                  textStyle: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.orange,
+                  ),
                 ),
               ),
               const SizedBox(height: 20),
 
-              // ฟิลด์กรอกชื่อเต็ม
+              // ฟิลด์กรอกข้อมูลผู้ใช้งาน
               _buildTextField(
-                controller: _fullNameController, 
+                controller: _fullNameController,
                 labelText: 'ชื่อเต็ม',
               ),
               const SizedBox(height: 20),
-
-              // ฟิลด์กรอกหมายเลขโทรศัพท์
               _buildTextField(
-                controller: _phoneNumberController, 
+                controller: _phoneNumberController,
                 labelText: 'หมายเลขโทรศัพท์',
               ),
               const SizedBox(height: 20),
-
-              // ฟิลด์กรอกเลขห้อง
               _buildTextField(
-                controller: _roomNumberController, 
+                controller: _roomNumberController,
                 labelText: 'เลขห้อง',
               ),
               const SizedBox(height: 20),
-
-              // ฟิลด์กรอกค่าเช่ารายเดือน
               _buildTextField(
-                controller: _monthlyRentController, 
-                labelText: 'ค่าเช่ารายเดือน (บาท)', 
+                controller: _monthlyRentController,
+                labelText: 'ค่าเช่ารายเดือน (บาท)',
                 keyboardType: TextInputType.number,
               ),
               const SizedBox(height: 20),
-
-              // ฟิลด์กรอกผู้ติดต่อฉุกเฉิน
               _buildTextField(
-                controller: _emergencyContactController, 
+                controller: _emergencyContactController,
                 labelText: 'ผู้ติดต่อฉุกเฉิน',
               ),
               const SizedBox(height: 20),
-
-              // ฟิลด์กรอก Line ID
               _buildTextField(
-                controller: _lineIdController, 
+                controller: _lineIdController,
                 labelText: 'Line ID',
               ),
               const SizedBox(height: 30),
@@ -130,21 +128,20 @@ class _EditUserPageState extends State<EditUserPage> {
                 child: ElevatedButton(
                   onPressed: _saveChanges,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange, // ปุ่มสีส้ม
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 15,
-                      horizontal: 40,
-                    ),
+                    backgroundColor: Colors.orange,
+                    padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 40),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
-                    elevation: 5, // เพิ่มเงาให้กับปุ่ม
+                    elevation: 5,
                   ),
-                  child: const Text(
+                  child: Text(
                     'บันทึกการแก้ไข',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.white, // ตัวอักษรสีขาว
+                    style: GoogleFonts.prompt(
+                      textStyle: const TextStyle(
+                        fontSize: 18,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
@@ -158,20 +155,24 @@ class _EditUserPageState extends State<EditUserPage> {
 
   // ฟังก์ชันสร้าง TextField พร้อมสไตล์
   Widget _buildTextField({
-    required TextEditingController controller, 
-    required String labelText, 
+    required TextEditingController controller,
+    required String labelText,
     TextInputType keyboardType = TextInputType.text,
   }) {
     return TextField(
       controller: controller,
       keyboardType: keyboardType,
+      style: GoogleFonts.prompt(),
       decoration: InputDecoration(
         labelText: labelText,
+        labelStyle: GoogleFonts.prompt(
+          textStyle: const TextStyle(color: Colors.grey),
+        ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12), // โค้งมน
+          borderRadius: BorderRadius.circular(12),
         ),
         filled: true,
-        fillColor: Colors.grey[100], // พื้นหลังสีเทาอ่อน
+        fillColor: Colors.grey[100],
       ),
     );
   }

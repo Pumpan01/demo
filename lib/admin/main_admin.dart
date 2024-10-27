@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'manage_bills.dart';
 import 'manage_repairs.dart';
 import 'manage_announcements.dart';
-import 'manage_users.dart'; // นำเข้าไฟล์ manage_users.dart
+import 'manage_users.dart';
 
 void main() {
   runApp(const AdminApp());
@@ -44,7 +45,15 @@ class AdminHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Admin Dashboard'),
+        title: Text(
+          'Admin Dashboard',
+          style: GoogleFonts.poppins(
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        centerTitle: true,
+        elevation: 0,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -57,12 +66,11 @@ class AdminHomePage extends StatelessWidget {
               icon: Icons.receipt_long,
               title: 'แก้ไขบิล',
               subtitle: 'จัดการบิล',
-              color: Colors.white,
-              iconColor: Colors.orange,
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const ManageBillsPage()),
+                  MaterialPageRoute(
+                      builder: (context) => const ManageBillsPage()),
                 );
               },
             ),
@@ -70,12 +78,11 @@ class AdminHomePage extends StatelessWidget {
               icon: Icons.meeting_room,
               title: 'รับเรื่องซ่อมบำรุง',
               subtitle: 'รับเรื่องซ่อมบำรุง',
-              color: Colors.white,
-              iconColor: Colors.orange,
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const ManageRepairsPage()),
+                  MaterialPageRoute(
+                      builder: (context) => const ManageRepairsPage()),
                 );
               },
             ),
@@ -83,12 +90,11 @@ class AdminHomePage extends StatelessWidget {
               icon: Icons.announcement,
               title: 'ประกาศแจ้งเตือน',
               subtitle: 'จัดการประกาศ',
-              color: Colors.white,
-              iconColor: Colors.orange,
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const ManageAnnouncementsPage()),
+                  MaterialPageRoute(
+                      builder: (context) => const ManageAnnouncementsPage()),
                 );
               },
             ),
@@ -96,12 +102,11 @@ class AdminHomePage extends StatelessWidget {
               icon: Icons.people,
               title: 'จัดการผู้ใช้',
               subtitle: 'จัดการผู้ใช้งาน',
-              color: Colors.white,
-              iconColor: Colors.orange,
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const ManageUsersPage()),
+                  MaterialPageRoute(
+                      builder: (context) => const ManageUsersPage()),
                 );
               },
             ),
@@ -112,21 +117,16 @@ class AdminHomePage extends StatelessWidget {
   }
 }
 
-// Widget AdminMenuButton
 class AdminMenuButton extends StatelessWidget {
   final IconData icon;
   final String title;
   final String subtitle;
-  final Color color;
-  final Color iconColor;
   final VoidCallback onTap;
 
   const AdminMenuButton({
     required this.icon,
     required this.title,
     required this.subtitle,
-    required this.color,
-    required this.iconColor,
     required this.onTap,
     super.key,
   });
@@ -137,7 +137,7 @@ class AdminMenuButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: color,
+          color: Colors.white,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -156,24 +156,28 @@ class AdminMenuButton extends StatelessWidget {
               Icon(
                 icon,
                 size: 48,
-                color: iconColor,
+                color: Colors.orange,
               ),
               const SizedBox(height: 10),
               Text(
                 title,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
+                style: GoogleFonts.poppins(
+                  textStyle: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
                 ),
               ),
               Text(
                 subtitle,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: Colors.black54,
+                style: GoogleFonts.poppins(
+                  textStyle: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.black54,
+                  ),
                 ),
               ),
             ],
